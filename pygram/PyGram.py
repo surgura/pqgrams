@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#Author: Tim Henderson and Tyler Goeringer
+#Email: tim.tadh@gmail.com
+#For licensing see the LICENSE file in the top level directory.
+
 """
 Allows for the computation of the PQ-Gram edit distance of two trees. To
 calculate the distance, a Profile object must first be created for each tree,
