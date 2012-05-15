@@ -1,21 +1,27 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#Author: Tim Henderson and Tyler Goeringer
+#Email: tim.tadh@gmail.com and tyler.goeringer@gmail.com
+#For licensing see the LICENSE file in the top level directory.
+
 """
-    This file provides unit testing for the different parts of the PQ-Gram algorithm.
+This file provides unit testing for the different parts of the PQ-Gram
+algorithm.  
 """
 
 import PyGram, tree
 import unittest, random, itertools
 
 class ProfileCheck(unittest.TestCase):
-    """
-        This class verifies that PyGram.Profile is executing properly.
-    """
+    """This class verifies that PyGram.Profile is executing properly."""
         
     def checkProfileEquality(self, profile1, profile2):
-        """
-            Ensure that two different PQ-Gram Profile are actually the same. Used in later tests to
-            compare dynamically created Profiles against preset Profiles.
-        """
-        if len(profile1) != len(profile2) or len(profile1[0]) != len(profile2[0]):
+        """Ensure that two different PQ-Gram Profile are actually the same. Used
+        in later tests to compare dynamically created Profiles against preset
+        Profiles."""
+
+        if (len(profile1) != len(profile2) or 
+              len(profile1[0]) != len(profile2[0])): 
             return False
         for gram1 in profile1:
             contains = False
@@ -61,13 +67,19 @@ class ProfileCheck(unittest.TestCase):
         self.trees.append(self.known_tree1)
         self.trees.append(self.known_tree2)
         
-        self.known_profile1 = [['*','a','*','*','a'],['a','a','*','*','e'],['a','e','*','*','*'],['a','a','*','e','b'], 
-                               ['a','b','*','*','*'],['a','a','e','b','*'],['a','a','b','*','*'],['*','a','*','a','b'],
-                               ['a','b','*','*','*'],['*','a','a','b','c'],['a','c','*','*','*'],['*','a','b','c','*'],
+        self.known_profile1 = [['*','a','*','*','a'], ['a','a','*','*','e'], 
+                               ['a','e','*','*','*'], ['a','a','*','e','b'],
+                               ['a','b','*','*','*'], ['a','a','e','b','*'],
+                               ['a','a','b','*','*'], ['*','a','*','a','b'],
+                               ['a','b','*','*','*'], ['*','a','a','b','c'],
+                               ['a','c','*','*','*'], ['*','a','b','c','*'],
                                ['*','a','c','*','*']] 
-        self.known_profile2 = [['*','a','*','*','a'],['a','a','*','*','e'],['a','e','*','*','*'],['a','a','*','e','b'], 
-                               ['a','b','*','*','*'],['a','a','e','b','*'],['a','a','b','*','*'],['*','a','*','a','b'],
-                               ['a','b','*','*','*'],['*','a','a','b','x'],['a','x','*','*','*'],['*','a','b','x','*'],
+        self.known_profile2 = [['*','a','*','*','a'], ['a','a','*','*','e'], 
+                               ['a','e','*','*','*'], ['a','a','*','e','b'],
+                               ['a','b','*','*','*'], ['a','a','e','b','*'],
+                               ['a','a','b','*','*'], ['*','a','*','a','b'],
+                               ['a','b','*','*','*'], ['*','a','a','b','x'],
+                               ['a','x','*','*','*'], ['*','a','b','x','*'],
                                ['*','a','x','*','*']] 
         
         self.known_edit_distance = 0.31
@@ -84,10 +96,14 @@ class ProfileCheck(unittest.TestCase):
         
     def testProfileCreation(self):
         """Tests the creation of profiles against known profiles."""
-        small_tree1_equality = self.checkProfileEquality(self.profiles[0], self.small_profile1)
-        small_tree2_equality = self.checkProfileEquality(self.profiles[1], self.small_profile2)
-        known_tree1_equality = self.checkProfileEquality(self.profiles[2], self.known_profile1)
-        known_tree2_equality = self.checkProfileEquality(self.profiles[3], self.known_profile2)
+        small_tree1_equality = \
+            self.checkProfileEquality(self.profiles[0], self.small_profile1)
+        small_tree2_equality = \
+            self.checkProfileEquality(self.profiles[1], self.small_profile2)
+        known_tree1_equality = \
+            self.checkProfileEquality(self.profiles[2], self.known_profile1)
+        known_tree2_equality = \
+            self.checkProfileEquality(self.profiles[3], self.known_profile2)
         
         self.assertEqual(small_tree1_equality, True)
         self.assertEqual(small_tree2_equality, True)
@@ -98,20 +114,29 @@ class ProfileCheck(unittest.TestCase):
         """x.edit_distance(y) should be the same as y.edit_distance(x)"""
         for profile1 in self.profiles:
             for profile2 in self.profiles:
-                self.assertEqual(profile1.edit_distance(profile2), profile2.edit_distance(profile1))
+                self.assertEqual(
+                    profile1.edit_distance(profile2), 
+                    profile2.edit_distance(profile1)
+                )
                 
     def testEditDistanceBoundaries(self):
         """x.edit_distance(y) should always return a value between 0 and 1"""
         for profile1 in self.profiles:
             for profile2 in self.profiles:
-                self.assertTrue(profile1.edit_distance(profile2) <= 1.0 and profile1.edit_distance(profile2) >= 0)
+                self.assertTrue(
+                    profile1.edit_distance(profile2) <= 1.0 and 
+                    profile1.edit_distance(profile2) >= 0)
                 
     def testTriangleInequality(self):
         """The triangle inequality should hold true for any three trees"""
         for profile1 in self.profiles:
             for profile2 in self.profiles:
                 for profile3 in self.profiles:
-                    self.assertTrue(profile1.edit_distance(profile3) <= profile1.edit_distance(profile2) + profile2.edit_distance(profile3))
+                    self.assertTrue(
+                        profile1.edit_distance(profile3) <= 
+                          profile1.edit_distance(profile2) + 
+                          profile2.edit_distance(profile3)
+                    )
 
     def testIdentity(self):
         """x.edit_distance(x) should always be 0"""
@@ -119,17 +144,17 @@ class ProfileCheck(unittest.TestCase):
             self.assertEqual(profile.edit_distance(profile), 0)
             
     def testKnownValues(self):
-        """The edit distance of known_tree1 and known_tree2 should be approximately 0.31"""
+        """The edit distance of known_tree1 and known_tree2 should be
+        approximately 0.31"""
         edit_distance = self.profiles[2].edit_distance(self.profiles[3])
         self.assertEqual(round(edit_distance, 2), self.known_edit_distance)
         
 class RegisterCheck(unittest.TestCase):
-    """
-        This class verifies that PyGram.ShiftRegister is executing properly.
-    """
+    """This class verifies that PyGram.ShiftRegister is executing properly."""
 
     def testRegisterCreation(self):
-        """__init__ should create a register of the given size filled with '*'"""
+        """__init__ should create a register of the given size filled with '*'
+        """
         sizes = list()
         for i in range(10):
             sizes.append(random.randint(1, 50))
@@ -182,3 +207,4 @@ def randtree(depth=2, alpha='abcdefghijklmnopqrstuvwxyz', repeat=2, width=2):
         
 if __name__ == "__main__":
     unittest.main()
+

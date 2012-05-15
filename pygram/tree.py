@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#Author: Tim Henderson and Tyler Goeringer
+#Email: tim.tadh@gmail.com and tyler.goeringer@gmail.com
+#For licensing see the LICENSE file in the top level directory.
+
 class Node(object):
     """A generic representation of a tree node. Includes a string label and a
     list of a children."""
