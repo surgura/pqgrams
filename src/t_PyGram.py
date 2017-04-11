@@ -85,16 +85,18 @@ class ProfileCheck(unittest.TestCase):
         for tree1 in self.trees:
             self.profiles.append(PyGram.Profile(tree1, self.p, self.q))
 
-        self.prof = cProfile.Profile()
-        self.prof.enable()
+        #self.prof = cProfile.Profile()
+        if hasattr(self, "prof"):
+            self.prof.enable()
 
     def tearDown(self):
         """finish any test"""
-        p = Stats(self.prof)
-        p.strip_dirs()
-        p.sort_stats('cumtime')
-        p.print_stats()
-        print("\n--->>>")
+        if hasattr(self, "prof"):
+            p = Stats(self.prof)
+            p.strip_dirs()
+            p.sort_stats('cumtime')
+            p.print_stats()
+            print("\n--->>>")
 
 
     def testProfileCreation(self):
@@ -104,7 +106,6 @@ class ProfileCheck(unittest.TestCase):
         known_tree1_equality = self.checkProfileEquality(self.profiles[2], self.known_profile1)
         known_tree2_equality = self.checkProfileEquality(self.profiles[3], self.known_profile2)
 
-        print(self.profiles[0], self.small_profile1)
         self.assertEqual(small_tree1_equality, True)
         self.assertEqual(small_tree2_equality, True)
         self.assertEqual(known_tree1_equality, True)
