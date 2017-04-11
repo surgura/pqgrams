@@ -1,3 +1,5 @@
+import lxml
+
 class Node(object):
     """
         A generic representation of a tree node. Includes a string label and a list of a children.
@@ -19,9 +21,9 @@ class Node(object):
         if before:  self.children.insert(0, node)
         else:   self.children.append(node)
         return self
-        
+
 ##### Helper Methods #####
-        
+
 def split_tree(root, delimiter=""):
     """
         Traverses a tree and explodes it based on the given delimiter. Each node is split into a null
