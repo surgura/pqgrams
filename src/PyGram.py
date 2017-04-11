@@ -8,11 +8,13 @@
 import tree, copy
 import functools
 import collections
+import itertools
+
 
 class Profile(object):
     """
         Represents a PQ-Gram Profile, which is a list of PQ-Grams. Each PQ-Gram is represented by a
-        ShiftRegister. This class relies on both the ShiftRegister and tree.Node classes.
+        deque. This class relies on the tree.Node classe.
     """
 
     def __init__(self, root, p=2, q=3):
@@ -24,7 +26,7 @@ class Profile(object):
             invalid.
         """
         super(Profile, self).__init__()
-        ancestors = ShiftRegister(p)
+        ancestors = collections.deque('*'*p, maxlen=p)
         self.list = list()
 
         self.profile(root, p, q, ancestors)
@@ -35,19 +37,19 @@ class Profile(object):
             Recursively builds the PQ-Gram profile of the given subtree. This method should not be called
             directly and is called from __init__.
         """
-        ancestors.shift(root.label)
-        siblings = ShiftRegister(q)
+        ancestors.append(root.label)
+        siblings = collections.deque('*'*q, maxlen=q)
 
         if(len(root.children) == 0):
-            self.append(ancestors.concatenate(siblings))
+            self.append(itertools.chain(ancestors, siblings))
         else:
             for child in root.children:
-                siblings.shift(child.label)
-                self.append(ancestors.concatenate(siblings))
-                self.profile(child, p, q, copy.deepcopy(ancestors))
+                siblings.append(child.label)
+                self.append(itertools.chain(ancestors, siblings))
+                self.profile(child, p, q, copy.copy(ancestors))
             for i in range(q-1):
-                siblings.shift("*")
-                self.append(ancestors.concatenate(siblings))
+                siblings.append("*")
+                self.append(itertools.chain(ancestors, siblings))
 
     def edit_distance(self, other):
         """
@@ -117,41 +119,6 @@ class Profile(object):
     def __iter__(self):
         for x in self.list: yield x
 
-class ShiftRegister(object):
-    """
-        Represents a register which acts as a fixed size queue. There are only two valid
-        operations on a ShiftRegister: shift and concatenate. Shifting results in a new
-        value being pushed onto the end of the list and the value at the beginning list being
-        removed. Note that you cannot recover this value, nor do you need to for generating
-        PQ-Gram Profiles.
-    """
-
-    def __init__(self, size):
-        """
-            Creates an internal list of the specified size and fills it with the default value
-            of "*". Once a ShiftRegister is created you cannot change the size without
-            concatenating another ShiftRegister.
-        """
-        self.register = list()
-        for i in range(size):
-            self.register.append("*")
-
-    def concatenate(self, reg):
-        """
-            Concatenates two ShiftRegisters and returns the resulting ShiftRegister.
-        """
-        temp = list(self.register)
-        temp.extend(reg.register)
-        return temp
-
-    def shift(self, el):
-        """
-            Shift is the primary operation on a ShiftRegister. The new item given is pushed onto
-            the end of the ShiftRegister, the first value is removed, and all items in between shift
-            to accomodate the new value.
-        """
-        self.register.pop(0)
-        self.register.append(el)
 
 """
     The following methods are provided for visualization of the PQ-Gram Profile structure. They

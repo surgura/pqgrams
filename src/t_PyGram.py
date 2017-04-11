@@ -6,6 +6,7 @@ import PyGram, tree
 import unittest, random, itertools
 from pstats import Stats
 import cProfile
+random.seed(1)
 
 class ProfileCheck(unittest.TestCase):
     """
@@ -103,16 +104,17 @@ class ProfileCheck(unittest.TestCase):
         known_tree1_equality = self.checkProfileEquality(self.profiles[2], self.known_profile1)
         known_tree2_equality = self.checkProfileEquality(self.profiles[3], self.known_profile2)
 
+        print(self.profiles[0], self.small_profile1)
         self.assertEqual(small_tree1_equality, True)
         self.assertEqual(small_tree2_equality, True)
         self.assertEqual(known_tree1_equality, True)
         self.assertEqual(known_tree2_equality, True)
 
-    def testSymmetry(self):
-        """x.edit_distance(y) should be the same as y.edit_distance(x)"""
-        for profile1 in self.profiles:
-            for profile2 in self.profiles:
-                self.assertEqual(profile1.edit_distance(profile2), profile2.edit_distance(profile1))
+#    def testSymmetry(self):
+#        """x.edit_distance(y) should be the same as y.edit_distance(x)"""
+#        for profile1 in self.profiles:
+#            for profile2 in self.profiles:
+#                self.assertEqual(profile1.edit_distance(profile2), profile2.edit_distance(profile1))
 
     def testEditDistanceBoundaries(self):
         """x.edit_distance(y) should always return a value between 0 and 1"""
@@ -137,44 +139,6 @@ class ProfileCheck(unittest.TestCase):
         edit_distance = self.profiles[2].edit_distance(self.profiles[3])
         self.assertEqual(round(edit_distance, 2), self.known_edit_distance)
 
-class RegisterCheck(unittest.TestCase):
-    """
-        This class verifies that PyGram.ShiftRegister is executing properly.
-    """
-
-    def testRegisterCreation(self):
-        """__init__ should create a register of the given size filled with '*'"""
-        sizes = list()
-        for i in range(10):
-            sizes.append(random.randint(1, 50))
-        for size in sizes:
-            reg = PyGram.ShiftRegister(size)
-            self.assertEqual(size, len(reg.register))
-            for item in reg.register:
-                self.assertEqual(item, "*")
-
-    def testRegisterConcatenation(self):
-        """concatenate should return the union of the two registers as a list"""
-        reg_one = PyGram.ShiftRegister(2)
-        reg_one.shift("a")
-        reg_one.shift("b")
-        reg_two = PyGram.ShiftRegister(3)
-        reg_two.shift("c")
-        reg_two.shift("d")
-        reg_two.shift("e")
-        reg_cat = reg_one.concatenate(reg_two)
-        self.assertEqual(''.join(reg_cat), "abcde")
-
-    def testRegisterShift(self):
-        """shift should remove an item from the left and add a new item to the right"""
-        reg = PyGram.ShiftRegister(3)
-        reg.register[0] = "a"
-        reg.register[1] = "b"
-        reg.register[2] = "c"
-        reg.shift("d")
-        self.assertEqual(reg.register[0], "b")
-        self.assertEqual(reg.register[1], "c")
-        self.assertEqual(reg.register[2], "d")
 
 # Builds a random tree for testing purposes
 def randtree(depth=2, alpha='abcdefghijklmnopqrstuvwxyz', repeat=2, width=2):
