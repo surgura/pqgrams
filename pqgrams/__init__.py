@@ -1,2 +1,2 @@
-from PyGram import Profile
+from PQGram import Profile
 
