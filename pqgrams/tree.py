@@ -41,12 +41,12 @@ def split_tree(root, delimiter=""):
     else:
         sub_labels = root.label.rsplit(delimiter)
     if len(sub_labels) > 1: # need to create a new root
-        new_root = Node("*", 0)
+        new_root = Node("*")
         for label in sub_labels:
-            new_root.children.append(Node(label, 0))
+            new_root.children.append(Node(label))
         heir = new_root.children[0]
     else: # root wasn't split, use it as the new root
-        new_root = Node(root.label, 0)
+        new_root = Node(root.label)
         heir = new_root
     for child in root.children:
         heir.children.extend(split_node(child, delimiter))
@@ -62,7 +62,7 @@ def split_node(node, delimiter):
         sub_labels = node.label.rsplit(delimiter)
     sub_nodes = list()
     for label in sub_labels:
-        sub_nodes.append(Node(label, 0))
+        sub_nodes.append(Node(label))
     if len(sub_nodes) > 0:
         for child in node.children:
             sub_nodes[0].children.extend(split_node(child, delimiter))
