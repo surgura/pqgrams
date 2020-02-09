@@ -11,7 +11,7 @@
     For more information on the PQ-Gram algorithm, please see the README.
 """
 
-import tree, copy
+import pqgrams.tree, copy
 import functools
 import collections
 import itertools
