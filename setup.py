@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-setup(name='pygram',
+setup(name='pqgrams',
       version='git master',
       description=(
         'An efficient approximation for tree edit-distance.'
@@ -9,6 +9,6 @@ setup(name='pygram',
       author_email='tim.tadh@gmail.com',
       url='https://www.github.com/timtadh/PyGram',
       license='BSD',
-      packages=['pygram'],
+      packages=['pqgrams'],
 )
 

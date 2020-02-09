@@ -8,7 +8,7 @@
     This file provides unit testing for the different parts of the PQ-Gram algorithm.
 """
 
-import PyGram, tree
+import PQGram, tree
 import unittest, random, itertools
 from pstats import Stats
 import cProfile
@@ -16,7 +16,7 @@ random.seed(1)
 
 class ProfileCheck(unittest.TestCase):
     """
-        This class verifies that PyGram.Profile is executing properly.
+        This class verifies that PQGram.Profile is executing properly.
     """
 
     def checkProfileEquality(self, profile1, profile2):
@@ -89,7 +89,7 @@ class ProfileCheck(unittest.TestCase):
 
         # Generate Profiles
         for tree1 in self.trees:
-            self.profiles.append(PyGram.Profile(tree1, self.p, self.q))
+            self.profiles.append(PQGram.Profile(tree1, self.p, self.q))
 
         #self.prof = cProfile.Profile()
         if hasattr(self, "prof"):
