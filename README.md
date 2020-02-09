@@ -1,4 +1,7 @@
-# pyGram - PQ-Gram Edit Distance
+# pqgrams - PQ-Gram Edit Distance
+
+This is a fork originally from https://github.com/TylerGoeringer/PyGram and it has
+adaptations from https://github.com/timtadh/PyGram/ and https://github.com/cathalgarvey/PyGram/
 
 A Python implementation of the PQ-Gram algorithm for approximating tree edit
 distance. For more information on the algorithm, please see the academic paper:
@@ -25,7 +28,7 @@ distance of 0 does not mean the two trees are identical, only very similar.
 
 ## Usage
 
-To use PyGram.py distance you must complete three steps:
+To use the PQGram.py distance you must complete three steps:
 
 1. Re-write or modify tree.py. This class is currently a stub which provides a
    basic tree structure. In order for PyGram.py to function properly, this stub
@@ -46,8 +49,10 @@ To use PyGram.py distance you must complete three steps:
 3. Call the edit\_distance method using two PQ-Gram Profiles.
 
     
-Note that there is no installation script, simply add the source files to the
+In the original version there is no installation script, so one can simply add the source files to the
 appropriate directory and use them.
+Using this fork, the library can be installed via `pip install git+git://github.com/thdiaman/pqgrams.git`
+
 
 ## Tips
 
